@@ -5,20 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Asche — Full Stack Developer</title>
   <meta name="description" content="Full-stack developer crafting performant, accessible, and beautiful web applications.">
-
-  <!-- Open Graph / Social -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Asche — Full Stack Developer">
   <meta property="og:description" content="Full-stack developer crafting performant, accessible, and beautiful web applications.">
   <meta property="og:image" content="https://asche.dev/og-image.jpg">
   <meta property="og:url" content="https://asche.dev">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Asche — Full Stack Developer">
-  <meta name="twitter:description" content="Full-stack developer crafting performant, accessible, and beautiful web applications.">
-
-  <!-- Theme Color -->
   <meta name="theme-color" content="#0a0a0a">
-
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -55,12 +48,10 @@
       --cursor-size: 20px;
       --cursor-hover-size: 60px;
       --accent: #34d399;
-      --accent-glow: rgba(52, 211, 153, 0.3);
-      --smooth-scroll: cubic-bezier(0.16, 1, 0.3, 1);
+      --smooth: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     html { scroll-behavior: smooth; }
-
     body { 
       font-family: 'Inter', system-ui, sans-serif; 
       cursor: none;
@@ -68,7 +59,6 @@
       background: #0a0a0a;
     }
 
-    /* Reduced Motion */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -79,476 +69,228 @@
       #particle-canvas { display: none; }
     }
 
-    /* Skip Link */
     .skip-link {
-      position: absolute;
-      top: -100%;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10001;
-      background: #34d399;
-      color: #000;
-      padding: 0.75rem 1.5rem;
-      font-weight: 600;
+      position: absolute; top: -100%; left: 50%;
+      transform: translateX(-50%); z-index: 10001;
+      background: #34d399; color: #000;
+      padding: 0.75rem 1.5rem; font-weight: 600;
       border-radius: 0 0 12px 12px;
-      transition: top 0.3s var(--smooth-scroll);
+      transition: top 0.3s var(--smooth);
     }
     .skip-link:focus { top: 0; outline: none; }
 
-    /* Custom Cursor */
     .cursor-dot, .cursor-outline {
-      position: fixed;
-      top: 0; left: 0;
+      position: fixed; top: 0; left: 0;
       transform: translate(-50%, -50%);
-      border-radius: 50%;
-      z-index: 9999;
+      border-radius: 50%; z-index: 9999;
       pointer-events: none;
     }
-    .cursor-dot {
-      width: 8px; height: 8px;
-      background: var(--accent);
-      transition: width 0.2s, height 0.2s, background 0.2s;
-    }
-    .cursor-outline {
-      width: var(--cursor-size); height: var(--cursor-size);
-      border: 1.5px solid var(--accent);
-      transition: width 0.3s var(--smooth-scroll), height 0.3s var(--smooth-scroll),
-                  border-color 0.3s, background 0.3s;
-    }
-    .cursor-outline.hover {
-      width: var(--cursor-hover-size); height: var(--cursor-hover-size);
-      background: rgba(52, 211, 153, 0.08);
-      border-color: rgba(52, 211, 153, 0.5);
-    }
-    .cursor-dot.hover {
-      width: 4px; height: 4px;
-      background: #fff;
-    }
-    @media (hover: none) {
-      body { cursor: auto; }
-      .cursor-dot, .cursor-outline { display: none; }
-    }
+    .cursor-dot { width: 8px; height: 8px; background: var(--accent); transition: width 0.2s, height 0.2s, background 0.2s; }
+    .cursor-outline { width: var(--cursor-size); height: var(--cursor-size); border: 1.5px solid var(--accent); transition: width 0.3s var(--smooth), height 0.3s var(--smooth), border-color 0.3s, background 0.3s; }
+    .cursor-outline.hover { width: var(--cursor-hover-size); height: var(--cursor-hover-size); background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.5); }
+    .cursor-dot.hover { width: 4px; height: 4px; background: #fff; }
+    @media (hover: none) { body { cursor: auto; } .cursor-dot, .cursor-outline { display: none; } }
 
     .gradient-text {
       background: linear-gradient(135deg, #34d399 0%, #22d3ee 50%, #a78bfa 100%);
       background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       animation: gradient-shift 8s ease infinite;
     }
-    @keyframes gradient-shift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
+    @keyframes gradient-shift { 0%,100%{background-position:0%50%} 50%{background-position:100%50%} }
 
-    .glass {
-      background: rgba(10, 10, 10, 0.6);
-      backdrop-filter: blur(20px) saturate(1.2);
-      -webkit-backdrop-filter: blur(20px) saturate(1.2);
-    }
-
+    .glass { background: rgba(10,10,10,0.6); backdrop-filter: blur(20px) saturate(1.2); -webkit-backdrop-filter: blur(20px) saturate(1.2); }
     ::selection { background: #34d399; color: #000; }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #0a0a0a; }
     ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #444; }
 
-    .noise {
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: 9998;
-      opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    }
+    .noise { position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
+
+    /* Text reveal */
+    .text-reveal { overflow: hidden; }
+    .text-reveal span { display: inline-block; transform: translateY(110%); opacity: 0; transition: transform 1s var(--smooth), opacity 1s var(--smooth); }
+    .text-reveal.active span { transform: translateY(0); opacity: 1; }
+    .text-reveal.stagger-words span:nth-child(1){transition-delay:0ms}
+    .text-reveal.stagger-words span:nth-child(2){transition-delay:80ms}
+    .text-reveal.stagger-words span:nth-child(3){transition-delay:160ms}
+    .text-reveal.stagger-words span:nth-child(4){transition-delay:240ms}
+    .text-reveal.stagger-words span:nth-child(5){transition-delay:320ms}
+    .text-reveal.stagger-words span:nth-child(6){transition-delay:400ms}
+    .text-reveal.stagger-words span:nth-child(7){transition-delay:480ms}
+    .text-reveal.stagger-words span:nth-child(8){transition-delay:560ms}
+    .text-reveal.stagger-words span:nth-child(9){transition-delay:640ms}
+    .text-reveal.stagger-words span:nth-child(10){transition-delay:720ms}
 
     /* Reveal */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 1s var(--smooth-scroll);
-    }
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 1s var(--smooth); }
     .reveal.active { opacity: 1; transform: translateY(0); }
-    .reveal-left {
-      opacity: 0;
-      transform: translateX(-60px);
-      transition: all 1s var(--smooth-scroll);
-    }
+    .reveal-left { opacity: 0; transform: translateX(-60px); transition: all 1s var(--smooth); }
     .reveal-left.active { opacity: 1; transform: translateX(0); }
-    .reveal-scale {
-      opacity: 0;
-      transform: scale(0.9);
-      transition: all 1s var(--smooth-scroll);
-    }
+    .reveal-scale { opacity: 0; transform: scale(0.9); transition: all 1s var(--smooth); }
     .reveal-scale.active { opacity: 1; transform: scale(1); }
+    .stagger-children > *:nth-child(1){transition-delay:0ms}
+    .stagger-children > *:nth-child(2){transition-delay:100ms}
+    .stagger-children > *:nth-child(3){transition-delay:200ms}
+    .stagger-children > *:nth-child(4){transition-delay:300ms}
+    .stagger-children > *:nth-child(5){transition-delay:400ms}
+    .stagger-children > *:nth-child(6){transition-delay:500ms}
 
-    .stagger-children > *:nth-child(1) { transition-delay: 0ms; }
-    .stagger-children > *:nth-child(2) { transition-delay: 100ms; }
-    .stagger-children > *:nth-child(3) { transition-delay: 200ms; }
-    .stagger-children > *:nth-child(4) { transition-delay: 300ms; }
-    .stagger-children > *:nth-child(5) { transition-delay: 400ms; }
-    .stagger-children > *:nth-child(6) { transition-delay: 500ms; }
-
-    /* Spotlight */
-    .spotlight-card {
-      position: relative;
-      overflow: hidden;
-    }
+    .spotlight-card { position: relative; overflow: hidden; }
     .spotlight-card::before {
-      content: '';
-      position: absolute;
-      top: var(--mouse-y, 50%);
-      left: var(--mouse-x, 50%);
+      content: ''; position: absolute;
+      top: var(--mouse-y,50%); left: var(--mouse-x,50%);
       width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(52, 211, 153, 0.08) 0%, transparent 70%);
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      transition: opacity 0.4s;
-      pointer-events: none;
-      z-index: 1;
+      background: radial-gradient(circle, rgba(52,211,153,0.08) 0%, transparent 70%);
+      transform: translate(-50%,-50%); opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 1;
     }
     .spotlight-card:hover::before { opacity: 1; }
 
-    /* 3D Tilt */
-    .tilt-card {
-      transform-style: preserve-3d;
-      transition: transform 0.1s ease-out;
-    }
+    .tilt-card { transform-style: preserve-3d; transition: transform 0.1s ease-out; }
     .tilt-content { transform: translateZ(30px); }
+    .magnetic { transition: transform 0.3s var(--smooth); }
 
-    /* Magnetic */
-    .magnetic {
-      transition: transform 0.3s var(--smooth-scroll);
-    }
-
-    /* Skill bars */
-    .skill-track {
-      background: rgba(255,255,255,0.05);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .skill-fill {
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #34d399, #22d3ee);
-      width: 0%;
-      transition: width 1.5s var(--smooth-scroll);
-      position: relative;
-      overflow: hidden;
-    }
-    .skill-fill::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      animation: shimmer 2s infinite;
-    }
-    @keyframes shimmer {
-      0% { left: -100%; }
-      100% { left: 100%; }
-    }
+    .skill-track { background: rgba(255,255,255,0.05); border-radius: 999px; overflow: hidden; }
+    .skill-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #34d399, #22d3ee); width: 0%; transition: width 1.5s var(--smooth); position: relative; overflow: hidden; }
+    .skill-fill::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); animation: shimmer 2s infinite; }
+    @keyframes shimmer { 0%{left:-100%} 100%{left:100%} }
 
     /* Loader */
-    #loader {
-      position: fixed; inset: 0;
-      background: #0a0a0a;
-      z-index: 10000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      transition: opacity 0.8s var(--smooth-scroll), visibility 0.8s;
-    }
-    #loader.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    .loader-text {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.875rem;
-      color: #34d399;
-      margin-top: 1.5rem;
-      letter-spacing: 0.1em;
-    }
-    .loader-bar {
-      width: 200px; height: 2px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 2px;
-      margin-top: 1rem;
-      overflow: hidden;
-    }
-    .loader-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #34d399, #22d3ee);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
+    #loader { position: fixed; inset: 0; background: #0a0a0a; z-index: 10000; display: flex; align-items: center; justify-content: center; flex-direction: column; transition: opacity 0.8s var(--smooth), visibility 0.8s; }
+    #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader-text { font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; color: #34d399; margin-top: 1.5rem; letter-spacing: 0.1em; }
+    .loader-bar { width: 200px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 2px; margin-top: 1rem; overflow: hidden; }
+    .loader-bar-fill { height: 100%; background: linear-gradient(90deg, #34d399, #22d3ee); width: 0%; transition: width 0.3s ease; }
 
     .scramble-text { font-family: 'JetBrains Mono', monospace; }
-
-    /* Marquee */
     .marquee-container { overflow: hidden; white-space: nowrap; }
-    .marquee-content {
-      display: inline-flex;
-      animation: marquee 30s linear infinite;
-    }
+    .marquee-content { display: inline-flex; animation: marquee 30s linear infinite; }
 
-    /* Glow border */
     .glow-border { position: relative; }
-    .glow-border::after {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: inherit;
-      padding: 1px;
-      background: linear-gradient(135deg, transparent, transparent);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    .glow-border:hover::after {
-      background: linear-gradient(135deg, #34d399, #22d3ee, #a78bfa);
-      opacity: 1;
-    }
+    .glow-border::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, transparent, transparent); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.4s; }
+    .glow-border:hover::after { background: linear-gradient(135deg, #34d399, #22d3ee, #a78bfa); opacity: 1; }
 
-    /* Mobile menu */
-    #mobile-menu {
-      transition: max-height 0.5s var(--smooth-scroll), opacity 0.4s ease;
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
-    }
+    #mobile-menu { transition: max-height 0.5s var(--smooth), opacity 0.4s ease; max-height: 0; opacity: 0; overflow: hidden; }
     #mobile-menu.open { max-height: 400px; opacity: 1; }
 
-    /* Canvas */
-    #particle-canvas {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none; z-index: 0;
-    }
+    #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 
-    /* Project card */
     .project-img-container { overflow: hidden; }
-    .project-img-container .emoji-display {
-      transition: transform 0.7s var(--smooth-scroll);
-    }
-    .project-card:hover .project-img-container .emoji-display {
-      transform: scale(1.1);
-    }
+    .project-img-container .emoji-display { transition: transform 0.7s var(--smooth); }
+    .project-card:hover .project-img-container .emoji-display { transform: scale(1.1); }
 
-    .terminal-line {
-      border-left: 2px solid #34d399;
-      padding-left: 1rem;
-      margin-left: -1rem;
-    }
-
+    .terminal-line { border-left: 2px solid #34d399; padding-left: 1rem; margin-left: -1rem; }
     .counter { font-variant-numeric: tabular-nums; }
 
-    /* Orbs */
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.4;
-      animation: orb-float 20s ease-in-out infinite;
-      will-change: transform;
-    }
-    @keyframes orb-float {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      25% { transform: translate(30px, -30px) scale(1.1); }
-      50% { transform: translate(-20px, 20px) scale(0.9); }
-      75% { transform: translate(20px, 10px) scale(1.05); }
-    }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: orb-float 20s ease-in-out infinite; will-change: transform; }
+    @keyframes orb-float { 0%,100%{transform:translate(0,0)scale(1)} 25%{transform:translate(30px,-30px)scale(1.1)} 50%{transform:translate(-20px,20px)scale(0.9)} 75%{transform:translate(20px,10px)scale(1.05)} }
 
     .status-ring { position: relative; }
-    .status-ring::before {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      border: 2px solid #34d399;
-      animation: status-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-    }
-    @keyframes status-ping {
-      75%, 100% { transform: scale(1.5); opacity: 0; }
-    }
+    .status-ring::before { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #34d399; animation: status-ping 2s cubic-bezier(0,0,0.2,1) infinite; }
+    @keyframes status-ping { 75%,100%{transform:scale(1.5);opacity:0} }
 
     .link-underline { position: relative; }
-    .link-underline::after {
-      content: '';
-      position: absolute;
-      bottom: -2px; left: 0;
-      width: 0; height: 1px;
-      background: currentColor;
-      transition: width 0.4s var(--smooth-scroll);
-    }
+    .link-underline::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: currentColor; transition: width 0.4s var(--smooth); }
     .link-underline:hover::after { width: 100%; }
 
-    .input-glow:focus {
-      box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1), 0 0 20px rgba(52, 211, 153, 0.05);
-    }
+    .input-glow:focus { box-shadow: 0 0 0 3px rgba(52,211,153,0.1), 0 0 20px rgba(52,211,153,0.05); }
 
-    #scroll-progress {
-      position: fixed; top: 0; left: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #34d399, #22d3ee);
-      z-index: 9999;
-      width: 0%;
-      transition: width 0.1s linear;
-    }
+    #scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, #34d399, #22d3ee); z-index: 9999; width: 0%; transition: width 0.1s linear; }
 
     /* Toast */
-    #toast-container {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 10001;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      pointer-events: none;
-    }
-    .toast {
-      background: rgba(20, 20, 20, 0.95);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-left: 3px solid #34d399;
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 0.875rem;
-      font-weight: 500;
-      transform: translateX(120%);
-      opacity: 0;
-      transition: all 0.5s var(--smooth-scroll);
-      pointer-events: auto;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-      max-width: 320px;
-    }
-    .toast.show {
-      transform: translateX(0);
-      opacity: 1;
-    }
+    #toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 10001; display: flex; flex-direction: column; gap: 0.75rem; pointer-events: none; }
+    .toast { background: rgba(20,20,20,0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-left: 3px solid #34d399; padding: 1rem 1.5rem; border-radius: 12px; color: #fff; font-size: 0.875rem; font-weight: 500; transform: translateX(120%); opacity: 0; transition: all 0.5s var(--smooth); pointer-events: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.4); max-width: 320px; }
+    .toast.show { transform: translateX(0); opacity: 1; }
     .toast.error { border-left-color: #ef4444; }
 
-    /* Horizontal scroll section */
-    .horizontal-section {
-      position: relative;
-      height: 300vh;
-    }
-    .horizontal-sticky {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-    }
-    .horizontal-track {
-      display: flex;
-      gap: 2rem;
-      padding: 0 4rem;
-      will-change: transform;
-    }
+    /* Horizontal scroll */
+    .horizontal-section { position: relative; height: 300vh; }
+    .horizontal-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; }
+    .horizontal-track { display: flex; gap: 2rem; padding: 0 4rem; will-change: transform; cursor: grab; }
+    .horizontal-track:active { cursor: grabbing; }
 
-    /* Page transition overlay */
-    #page-transition {
-      position: fixed;
-      inset: 0;
-      background: #0a0a0a;
-      z-index: 9997;
-      transform: translateY(100%);
-      transition: transform 0.6s var(--smooth-scroll);
-      pointer-events: none;
-    }
-    #page-transition.active {
-      transform: translateY(0);
-    }
+    /* Dot nav */
+    .dot-nav { position: fixed; right: 2rem; top: 50%; transform: translateY(-50%); z-index: 100; display: flex; flex-direction: column; gap: 1rem; }
+    .dot-nav-item { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.1); transition: all 0.4s var(--smooth); cursor: pointer; position: relative; }
+    .dot-nav-item::after { content: attr(data-label); position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%) translateX(10px); white-space: nowrap; font-size: 0.7rem; font-weight: 500; color: rgba(255,255,255,0.6); opacity: 0; transition: all 0.3s var(--smooth); pointer-events: none; letter-spacing: 0.05em; text-transform: uppercase; }
+    .dot-nav-item:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
+    .dot-nav-item.active { background: #34d399; border-color: #34d399; box-shadow: 0 0 12px rgba(52,211,153,0.4); transform: scale(1.3); }
+    @media (max-width: 1024px) { .dot-nav { display: none; } }
 
-    /* Focus visible styles */
-    *:focus-visible {
-      outline: 2px solid #34d399;
-      outline-offset: 2px;
-    }
+    /* Timeline */
+    .timeline { position: relative; }
+    .timeline::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, transparent, rgba(52,211,153,0.3), transparent); transform: translateX(-50%); }
+    @media (max-width: 768px) { .timeline::before { left: 1.5rem; } }
+    .timeline-item { position: relative; }
+    .timeline-dot { position: absolute; left: 50%; top: 1.5rem; width: 12px; height: 12px; border-radius: 50%; background: #34d399; border: 3px solid #0a0a0a; transform: translateX(-50%); box-shadow: 0 0 0 3px rgba(52,211,153,0.2); z-index: 2; }
+    @media (max-width: 768px) { .timeline-dot { left: 1.5rem; } }
+    .timeline-card { width: calc(50% - 3rem); }
+    .timeline-card.right { margin-left: auto; }
+    @media (max-width: 768px) { .timeline-card { width: calc(100% - 4rem); margin-left: auto !important; } }
 
-    /* Parallax */
+    /* Page transition */
+    #page-transition { position: fixed; inset: 0; background: #0a0a0a; z-index: 9997; transform: translateY(100%); transition: transform 0.6s var(--smooth); pointer-events: none; }
+    #page-transition.active { transform: translateY(0); }
+
+    *:focus-visible { outline: 2px solid #34d399; outline-offset: 2px; }
+
     .parallax-slow { will-change: transform; }
     .parallax-fast { will-change: transform; }
+
+    /* Velocity skew */
+    .velocity-skew { transition: transform 0.15s ease-out; will-change: transform; }
   </style>
 <base target="_blank">
 </head>
 <body class="bg-neutral-950 text-white antialiased overflow-x-hidden">
 
-  <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <!-- Loading Screen -->
   <div id="loader" role="status" aria-live="polite">
     <div class="text-4xl font-bold tracking-tighter">Asche<span class="text-emerald-400">.</span></div>
-    <div class="loader-bar" aria-hidden="true">
-      <div class="loader-bar-fill" id="loader-fill"></div>
-    </div>
+    <div class="loader-bar" aria-hidden="true"><div class="loader-bar-fill" id="loader-fill"></div></div>
     <div class="loader-text" id="loader-text">INITIALIZING...</div>
   </div>
 
-  <!-- Page Transition Overlay -->
   <div id="page-transition" aria-hidden="true"></div>
-
-  <!-- Noise Overlay -->
   <div class="noise" aria-hidden="true"></div>
-
-  <!-- Scroll Progress -->
   <div id="scroll-progress" aria-hidden="true"></div>
-
-  <!-- Toast Container -->
   <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- Custom Cursor -->
+  <!-- Dot Navigation -->
+  <nav class="dot-nav" aria-label="Section navigation">
+    <a href="#hero" class="dot-nav-item active" data-label="Home" aria-label="Go to Hero"></a>
+    <a href="#about" class="dot-nav-item" data-label="About" aria-label="Go to About"></a>
+    <a href="#skills" class="dot-nav-item" data-label="Skills" aria-label="Go to Skills"></a>
+    <a href="#experience" class="dot-nav-item" data-label="Experience" aria-label="Go to Experience"></a>
+    <a href="#projects" class="dot-nav-item" data-label="Projects" aria-label="Go to Projects"></a>
+    <a href="#contact" class="dot-nav-item" data-label="Contact" aria-label="Go to Contact"></a>
+  </nav>
+
   <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
   <div class="cursor-outline" id="cursor-outline" aria-hidden="true"></div>
-
-  <!-- Particle Canvas -->
   <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
-  <!-- Navigation -->
   <nav class="fixed top-0 w-full z-50 glass border-b border-white/5 transition-all duration-500" id="navbar" role="navigation" aria-label="Main navigation">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
       <a href="#hero" class="text-xl sm:text-2xl font-bold tracking-tighter hover:text-emerald-400 transition-colors duration-300 magnetic" data-magnetic aria-label="Home">ASCH<span class="text-emerald-400">E</span>.</a>
-
       <div class="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-400">
-        <a href="#about" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic>
-          <span class="link-underline">About</span>
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
-        </a>
-        <a href="#skills" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic>
-          <span class="link-underline">Skills</span>
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
-        </a>
-        <a href="#projects" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic>
-          <span class="link-underline">Projects</span>
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
-        </a>
-        <a href="#contact" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic>
-          <span class="link-underline">Contact</span>
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
-        </a>
+        <a href="#about" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic><span class="link-underline">About</span><span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#skills" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic><span class="link-underline">Skills</span><span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#experience" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic><span class="link-underline">Experience</span><span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#projects" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic><span class="link-underline">Projects</span><span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#contact" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic><span class="link-underline">Contact</span><span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span></a>
       </div>
-
       <button id="menu-btn" class="md:hidden text-white p-2 hover:bg-white/5 rounded-lg transition-colors magnetic" data-magnetic aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
     </div>
-
     <div id="mobile-menu" class="md:hidden bg-neutral-900/95 backdrop-blur-xl border-t border-white/5" role="menu" aria-label="Mobile menu">
       <div class="px-4 sm:px-6 py-4 space-y-1">
         <a href="#about" class="block py-3 text-neutral-400 hover:text-white hover:bg-white/5 rounded-lg px-3 transition-all" role="menuitem">About</a>
         <a href="#skills" class="block py-3 text-neutral-400 hover:text-white hover:bg-white/5 rounded-lg px-3 transition-all" role="menuitem">Skills</a>
+        <a href="#experience" class="block py-3 text-neutral-400 hover:text-white hover:bg-white/5 rounded-lg px-3 transition-all" role="menuitem">Experience</a>
         <a href="#projects" class="block py-3 text-neutral-400 hover:text-white hover:bg-white/5 rounded-lg px-3 transition-all" role="menuitem">Projects</a>
         <a href="#contact" class="block py-3 text-neutral-400 hover:text-white hover:bg-white/5 rounded-lg px-3 transition-all" role="menuitem">Contact</a>
       </div>
@@ -556,13 +298,13 @@
   </nav>
 
   <main id="main-content">
+
   <!-- Hero Section -->
-  <section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 px-4">
-    <!-- Floating Orbs -->
+  <section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 px-4 velocity-skew" data-section="hero">
     <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      <div class="orb top-1/4 left-1/4 w-[400px] h-[400px] bg-emerald-500/20 parallax-slow" data-speed="0.3" style="animation-delay: 0s;"></div>
-      <div class="orb bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/15 parallax-slow" data-speed="0.2" style="animation-delay: -5s;"></div>
-      <div class="orb top-1/2 left-1/2 w-[350px] h-[350px] bg-cyan-500/10 parallax-fast" data-speed="0.5" style="animation-delay: -10s;"></div>
+      <div class="orb top-1/4 left-1/4 w-[400px] h-[400px] bg-emerald-500/20 parallax-slow" data-speed="0.3" style="animation-delay:0s;"></div>
+      <div class="orb bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/15 parallax-slow" data-speed="0.2" style="animation-delay:-5s;"></div>
+      <div class="orb top-1/2 left-1/2 w-[350px] h-[350px] bg-cyan-500/10 parallax-fast" data-speed="0.5" style="animation-delay:-10s;"></div>
     </div>
 
     <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
@@ -572,25 +314,24 @@
       </div>
 
       <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 sm:mb-8 leading-[1.1]">
-        <span id="hero-line1">Building </span><span class="gradient-text" id="hero-line2">digital</span><br>
-        <span id="hero-line3">experiences</span>
+        <div class="text-reveal stagger-words" id="hero-line1">
+          <span>Building</span> <span class="gradient-text">digital</span>
+        </div>
+        <div class="text-reveal stagger-words" id="hero-line2" style="transition-delay:200ms">
+          <span>experiences</span>
+        </div>
       </h1>
 
-      <p class="text-base sm:text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed px-2" id="hero-desc">
+      <p class="text-base sm:text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed px-2 reveal" id="hero-desc">
         Full-stack developer crafting performant, accessible, and beautiful web applications. I turn complex problems into elegant solutions.
       </p>
 
-      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-        <a href="#projects" class="magnetic px-6 sm:px-8 py-3.5 sm:py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25 text-center" data-magnetic>
-          View My Work
-        </a>
-        <a href="#contact" class="magnetic px-6 sm:px-8 py-3.5 sm:py-4 border border-white/20 hover:border-white/40 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:bg-white/5 text-center" data-magnetic>
-          Get In Touch
-        </a>
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center reveal" style="transition-delay:200ms">
+        <a href="#projects" class="magnetic px-6 sm:px-8 py-3.5 sm:py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25 text-center" data-magnetic>View My Work</a>
+        <a href="#contact" class="magnetic px-6 sm:px-8 py-3.5 sm:py-4 border border-white/20 hover:border-white/40 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:bg-white/5 text-center" data-magnetic>Get In Touch</a>
       </div>
 
-      <!-- Stats Row -->
-      <div class="grid grid-cols-3 gap-4 sm:gap-8 mt-16 sm:mt-24 max-w-lg mx-auto">
+      <div class="grid grid-cols-3 gap-4 sm:gap-8 mt-16 sm:mt-24 max-w-lg mx-auto reveal" style="transition-delay:400ms">
         <div class="text-center">
           <div class="text-2xl sm:text-3xl font-bold text-white counter" data-target="5">0</div>
           <div class="text-xs sm:text-sm text-neutral-500 mt-1">Years Exp.</div>
@@ -607,9 +348,7 @@
     </div>
 
     <div class="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 animate-bounce" aria-hidden="true">
-      <svg class="w-5 h-5 sm:w-6 sm:h-6 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-      </svg>
+      <svg class="w-5 h-5 sm:w-6 sm:h-6 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
     </div>
   </section>
 
@@ -642,7 +381,7 @@
   </div>
 
   <!-- About Section -->
-  <section id="about" class="py-20 md:py-32 px-4 sm:px-6 relative">
+  <section id="about" class="py-20 md:py-32 px-4 sm:px-6 relative velocity-skew" data-section="about">
     <div class="max-w-6xl mx-auto">
       <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         <div class="relative reveal-left order-2 lg:order-1">
@@ -660,14 +399,9 @@
         <div class="reveal order-1 lg:order-2">
           <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3 font-mono">&lt;About /&gt;</h2>
           <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 sm:mb-8 leading-tight">Passionate about creating <span class="gradient-text">impactful</span> web experiences</h3>
-          <p class="text-neutral-400 leading-relaxed mb-4 sm:mb-6 text-base sm:text-lg">
-            I'm a developer who loves the intersection of design and engineering. With expertise across the modern web stack, I build products that are fast, accessible, and delightful to use.
-          </p>
-          <p class="text-neutral-400 leading-relaxed mb-8 sm:mb-10 text-sm sm:text-base">
-            When I'm not coding, you'll find me exploring new technologies, contributing to open source, or writing about development best practices.
-          </p>
+          <p class="text-neutral-400 leading-relaxed mb-4 sm:mb-6 text-base sm:text-lg">I'm a developer who loves the intersection of design and engineering. With expertise across the modern web stack, I build products that are fast, accessible, and delightful to use.</p>
+          <p class="text-neutral-400 leading-relaxed mb-8 sm:mb-10 text-sm sm:text-base">When I'm not coding, you'll find me exploring new technologies, contributing to open source, or writing about development best practices.</p>
 
-          <!-- Terminal-style info -->
           <div class="bg-neutral-900/80 border border-white/10 rounded-xl p-4 sm:p-5 font-mono text-xs sm:text-sm mb-8">
             <div class="terminal-line text-emerald-400 mb-2">$ whoami</div>
             <div class="text-neutral-300 mb-3">full-stack developer & creative technologist</div>
@@ -677,25 +411,18 @@
             <div class="text-neutral-300">["webgl", "ai/ml", "system design", "ux engineering"]</div>
           </div>
 
-          <!-- Social Links -->
           <div class="flex flex-wrap gap-3">
             <a href="https://github.com/leuabe36-sys" target="_blank" rel="noopener" class="magnetic p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" data-magnetic aria-label="GitHub (opens in new tab)">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
             </a>
             <a href="https://tiktok.com/@me665051" target="_blank" rel="noopener" class="magnetic p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" data-magnetic aria-label="TikTok (opens in new tab)">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-              </svg>
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
             </a>
             <a href="tg://resolve?domain=Mrx3036" target="_blank" rel="noopener" class="magnetic p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" data-magnetic aria-label="Telegram (opens in new tab)">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-              </svg>
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
             </a>
             <button class="magnetic p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" data-magnetic aria-label="Copy email address" onclick="copyToClipboard('leuabe36@gmail.com')">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-              </svg>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </button>
           </div>
         </div>
@@ -704,7 +431,7 @@
   </section>
 
   <!-- Skills Section -->
-  <section id="skills" class="py-20 md:py-32 px-4 sm:px-6 bg-neutral-900/30 relative">
+  <section id="skills" class="py-20 md:py-32 px-4 sm:px-6 bg-neutral-900/30 relative velocity-skew" data-section="skills">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-12 sm:mb-20 reveal">
         <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3 font-mono">&lt;Expertise /&gt;</h2>
@@ -715,9 +442,7 @@
         <div class="group spotlight-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-emerald-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-emerald-500/5 reveal tilt-card">
           <div class="tilt-content">
             <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-emerald-500/20 transition-colors duration-300">
-              <svg class="w-6 h-6 sm:w-7 sm:h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
-              </svg>
+              <svg class="w-6 h-6 sm:w-7 sm:h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
             </div>
             <h4 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Frontend</h4>
             <p class="text-neutral-400 leading-relaxed text-sm sm:text-base mb-4">React, Next.js, TypeScript, Tailwind CSS, Framer Motion, Three.js</p>
@@ -733,9 +458,7 @@
         <div class="group spotlight-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-purple-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/5 reveal tilt-card">
           <div class="tilt-content">
             <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-purple-500/20 transition-colors duration-300">
-              <svg class="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 01-2 2v4a2 2 0 012 2h14a2 2 0 012-2v-4a2 2 0 01-2-2m-2-4h.01M17 16h.01"/>
-              </svg>
+              <svg class="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 01-2 2v4a2 2 0 012 2h14a2 2 0 012-2v-4a2 2 0 01-2-2m-2-4h.01M17 16h.01"/></svg>
             </div>
             <h4 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Backend</h4>
             <p class="text-neutral-400 leading-relaxed text-sm sm:text-base mb-4">Node.js, Python, PostgreSQL, Redis, GraphQL, REST APIs, Prisma</p>
@@ -751,9 +474,7 @@
         <div class="group spotlight-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-cyan-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-500/5 reveal tilt-card">
           <div class="tilt-content">
             <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-cyan-500/10 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-cyan-500/20 transition-colors duration-300">
-              <svg class="w-6 h-6 sm:w-7 sm:h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-              </svg>
+              <svg class="w-6 h-6 sm:w-7 sm:h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
             </div>
             <h4 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">DevOps</h4>
             <p class="text-neutral-400 leading-relaxed text-sm sm:text-base mb-4">Docker, AWS, Vercel, CI/CD, Linux, Nginx, Terraform</p>
@@ -769,21 +490,108 @@
     </div>
   </section>
 
+  <!-- Experience Timeline Section -->
+  <section id="experience" class="py-20 md:py-32 px-4 sm:px-6 relative velocity-skew" data-section="experience">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-12 sm:mb-20 reveal">
+        <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3 font-mono">&lt;Experience /&gt;</h2>
+        <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold">Work <span class="gradient-text">History</span></h3>
+      </div>
+
+      <div class="timeline space-y-12 md:space-y-0">
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card bg-neutral-900/50 border border-white/5 rounded-2xl sm:rounded-3xl p-6 sm:p-8">
+            <div class="flex flex-wrap items-center gap-3 mb-3">
+              <span class="text-emerald-400 font-mono text-sm">2024 — Present</span>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/10">Current</span>
+            </div>
+            <h4 class="text-xl sm:text-2xl font-semibold mb-2">Senior Full Stack Developer</h4>
+            <p class="text-neutral-500 text-sm mb-4 font-mono">TechNova Solutions</p>
+            <p class="text-neutral-400 text-sm sm:text-base leading-relaxed">Leading a team of 5 developers building enterprise SaaS platforms. Architected microservices infrastructure handling 2M+ daily requests. Reduced API latency by 60% through Redis caching and query optimization.</p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">Next.js</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">Node.js</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">PostgreSQL</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">AWS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card right bg-neutral-900/50 border border-white/5 rounded-2xl sm:rounded-3xl p-6 sm:p-8">
+            <div class="flex flex-wrap items-center gap-3 mb-3">
+              <span class="text-emerald-400 font-mono text-sm">2022 — 2024</span>
+            </div>
+            <h4 class="text-xl sm:text-2xl font-semibold mb-2">Full Stack Developer</h4>
+            <p class="text-neutral-500 text-sm mb-4 font-mono">DigitalCraft Agency</p>
+            <p class="text-neutral-400 text-sm sm:text-base leading-relaxed">Built 20+ client projects across fintech, e-commerce, and healthcare. Implemented real-time features with WebSockets and built custom CMS solutions. Mentored junior developers and established code review practices.</p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">React</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">Python</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">Django</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">Docker</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card bg-neutral-900/50 border border-white/5 rounded-2xl sm:rounded-3xl p-6 sm:p-8">
+            <div class="flex flex-wrap items-center gap-3 mb-3">
+              <span class="text-emerald-400 font-mono text-sm">2021 — 2022</span>
+            </div>
+            <h4 class="text-xl sm:text-2xl font-semibold mb-2">Frontend Developer</h4>
+            <p class="text-neutral-500 text-sm mb-4 font-mono">StartupXYZ</p>
+            <p class="text-neutral-400 text-sm sm:text-base leading-relaxed">Developed the company's flagship product from MVP to production. Built design system with 40+ reusable components. Improved Lighthouse score from 42 to 96 through performance optimization.</p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">Vue.js</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">Tailwind</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">Firebase</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">Vercel</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card right bg-neutral-900/50 border border-white/5 rounded-2xl sm:rounded-3xl p-6 sm:p-8">
+            <div class="flex flex-wrap items-center gap-3 mb-3">
+              <span class="text-emerald-400 font-mono text-sm">2019 — 2021</span>
+            </div>
+            <h4 class="text-xl sm:text-2xl font-semibold mb-2">Junior Web Developer</h4>
+            <p class="text-neutral-500 text-sm mb-4 font-mono">Freelance</p>
+            <p class="text-neutral-400 text-sm sm:text-base leading-relaxed">Started my journey building websites for local businesses. Learned full-stack fundamentals while delivering 15+ projects. Discovered my passion for clean code and user-centered design.</p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">HTML/CSS</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">JavaScript</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">PHP</span>
+              <span class="px-2 py-1 rounded-lg bg-white/5 text-neutral-400 text-xs">MySQL</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- Projects Section -->
-  <section id="projects" class="py-20 md:py-32 px-4 sm:px-6">
-    <div class="max-w-6xl mx-auto mb-12 sm:mb-20">
+  <section id="projects" class="py-20 md:py-32 relative velocity-skew" data-section="projects">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 mb-12 sm:mb-20">
       <div class="text-center reveal">
         <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3 font-mono">&lt;Portfolio /&gt;</h2>
         <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold">Featured <span class="gradient-text">Projects</span></h3>
+        <p class="text-neutral-500 text-sm mt-3">Scroll or drag to explore</p>
       </div>
     </div>
 
-    <!-- Horizontal Scroll Projects -->
     <div class="horizontal-section" id="horizontal-projects">
       <div class="horizontal-sticky">
         <div class="horizontal-track" id="horizontal-track">
 
-          <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] max-w-[600px] spotlight-card glow-border tilt-card">
+          <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] max-w-[600px] spotlight-card glow-border tilt-card" tabindex="0" role="article" aria-label="Project 1">
             <div class="project-img-container aspect-video bg-gradient-to-br from-emerald-500/10 to-blue-500/10 flex items-center justify-center overflow-hidden">
               <div class="emoji-display text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">🚀</div>
             </div>
@@ -798,21 +606,17 @@
               <div class="flex gap-4 sm:gap-6">
                 <a href="#" class="magnetic text-sm font-semibold text-white hover:text-emerald-400 transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                   Live Demo 
-                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                  </svg>
+                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 </a>
                 <a href="#" class="magnetic text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                   GitHub
-                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                  </svg>
+                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 </a>
               </div>
             </div>
           </article>
 
-          <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] max-w-[600px] spotlight-card glow-border tilt-card">
+          <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] max-w-[600px] spotlight-card glow-border tilt-card" tabindex="0" role="article" aria-label="Project 2">
             <div class="project-img-container aspect-video bg-gradient-to-br from-purple-500/10 to-pink-500/10 flex items-center justify-center overflow-hidden">
               <div class="emoji-display text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">🛒</div>
             </div>
@@ -827,21 +631,17 @@
               <div class="flex gap-4 sm:gap-6">
                 <a href="#" class="magnetic text-sm font-semibold text-white hover:text-purple-400 transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                   Live Demo 
-                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                  </svg>
+                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 </a>
                 <a href="#" class="magnetic text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                   GitHub
-                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                  </svg>
+                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 </a>
               </div>
             </div>
           </article>
 
-          <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] max-w-[600px] spotlight-card glow-border tilt-card">
+          <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] max-w-[600px] spotlight-card glow-border tilt-card" tabindex="0" role="article" aria-label="Project 3">
             <div class="project-img-container aspect-video bg-gradient-to-br from-orange-500/10 to-red-500/10 flex items-center justify-center overflow-hidden">
               <div class="emoji-display text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">📝</div>
             </div>
@@ -856,21 +656,17 @@
               <div class="flex gap-4 sm:gap-6">
                 <a href="#" class="magnetic text-sm font-semibold text-white hover:text-orange-400 transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                   Live Demo 
-                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                  </svg>
+                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 </a>
                 <a href="#" class="magnetic text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                   GitHub
-                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                  </svg>
+                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 </a>
               </div>
             </div>
           </article>
 
-          <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] max-w-[600px] spotlight-card glow-border tilt-card">
+          <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] max-w-[600px] spotlight-card glow-border tilt-card" tabindex="0" role="article" aria-label="Project 4">
             <div class="project-img-container aspect-video bg-gradient-to-br from-cyan-500/10 to-teal-500/10 flex items-center justify-center overflow-hidden">
               <div class="emoji-display text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">🤖</div>
             </div>
@@ -885,21 +681,16 @@
               <div class="flex gap-4 sm:gap-6">
                 <a href="#" class="magnetic text-sm font-semibold text-white hover:text-cyan-400 transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                   Live Demo 
-                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                  </svg>
+                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 </a>
                 <a href="#" class="magnetic text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                   GitHub
-                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                  </svg>
+                  <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 </a>
               </div>
             </div>
           </article>
 
-          <!-- End spacer -->
           <div class="flex-shrink-0 w-[10vw]"></div>
         </div>
       </div>
@@ -907,7 +698,7 @@
   </section>
 
   <!-- Contact Section -->
-  <section id="contact" class="py-20 md:py-32 px-4 sm:px-6 bg-neutral-900/30 relative">
+  <section id="contact" class="py-20 md:py-32 px-4 sm:px-6 bg-neutral-900/30 relative velocity-skew" data-section="contact">
     <div class="max-w-3xl mx-auto">
       <div class="text-center mb-10 sm:mb-16 reveal">
         <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3 font-mono">&lt;Contact /&gt;</h2>
@@ -936,17 +727,13 @@
         </div>
         <button type="submit" id="submit-btn" class="magnetic w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25 flex items-center justify-center gap-2" data-magnetic>
           <span>Send Message</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-          </svg>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
         </button>
       </form>
 
       <div id="success-message" class="hidden text-center py-8 sm:py-12">
         <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4 sm:mb-6">
-          <svg class="w-8 h-8 sm:w-10 sm:h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-          </svg>
+          <svg class="w-8 h-8 sm:w-10 sm:h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
         </div>
         <h4 class="text-xl sm:text-2xl font-bold mb-2">Message Sent!</h4>
         <p class="text-neutral-400 text-sm sm:text-base">Thanks for reaching out. I'll get back to you soon.</p>
@@ -964,9 +751,7 @@
       </div>
       <p class="text-neutral-600 text-xs sm:text-sm text-center font-mono"> Built with passion and caffeine.</p>
       <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="magnetic p-2.5 sm:p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" data-magnetic aria-label="Back to top">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
-        </svg>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
       </button>
     </div>
   </footer>
@@ -974,17 +759,15 @@
 
   <script>
     // ============================================
-    // CONFIG & UTILS
+    // CONFIG
     // ============================================
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isTouchDevice = window.matchMedia('(hover: none)').matches;
 
-    function lerp(start, end, factor) {
-      return start + (end - start) * factor;
-    }
+    function lerp(start, end, factor) { return start + (end - start) * factor; }
 
     // ============================================
-    // TOAST NOTIFICATIONS
+    // TOAST
     // ============================================
     function showToast(message, type = 'success') {
       const container = document.getElementById('toast-container');
@@ -992,15 +775,8 @@
       toast.className = `toast ${type}`;
       toast.textContent = message;
       container.appendChild(toast);
-
-      requestAnimationFrame(() => {
-        toast.classList.add('show');
-      });
-
-      setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 500);
-      }, 3000);
+      requestAnimationFrame(() => toast.classList.add('show'));
+      setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 500); }, 3000);
     }
 
     // ============================================
@@ -1013,8 +789,7 @@
       } catch (err) {
         const textarea = document.createElement('textarea');
         textarea.value = text;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
+        textarea.style.cssText = 'position:fixed;opacity:0;';
         document.body.appendChild(textarea);
         textarea.select();
         document.execCommand('copy');
@@ -1046,8 +821,7 @@
           }, 600);
         } else {
           loaderFill.style.width = loadProgress + '%';
-          const textIndex = Math.min(Math.floor(loadProgress / 25), 3);
-          loaderText.textContent = loadingTexts[textIndex];
+          loaderText.textContent = loadingTexts[Math.min(Math.floor(loadProgress / 25), 3)];
         }
       }, 150);
     }
@@ -1058,17 +832,14 @@
     // ============================================
     const cursorDot = document.getElementById('cursor-dot');
     const cursorOutline = document.getElementById('cursor-outline');
-    let mouseX = 0, mouseY = 0;
-    let outlineX = 0, outlineY = 0;
+    let mouseX = 0, mouseY = 0, outlineX = 0, outlineY = 0;
 
     if (!isTouchDevice) {
       document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+        mouseX = e.clientX; mouseY = e.clientY;
         cursorDot.style.left = mouseX + 'px';
         cursorDot.style.top = mouseY + 'px';
       });
-
       function animateCursor() {
         outlineX = lerp(outlineX, mouseX, 0.15);
         outlineY = lerp(outlineY, mouseY, 0.15);
@@ -1078,16 +849,9 @@
       }
       animateCursor();
 
-      const hoverElements = document.querySelectorAll('a, button, [data-magnetic], input, textarea');
-      hoverElements.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-          cursorOutline.classList.add('hover');
-          cursorDot.classList.add('hover');
-        });
-        el.addEventListener('mouseleave', () => {
-          cursorOutline.classList.remove('hover');
-          cursorDot.classList.remove('hover');
-        });
+      document.querySelectorAll('a, button, [data-magnetic], input, textarea').forEach(el => {
+        el.addEventListener('mouseenter', () => { cursorOutline.classList.add('hover'); cursorDot.classList.add('hover'); });
+        el.addEventListener('mouseleave', () => { cursorOutline.classList.remove('hover'); cursorDot.classList.remove('hover'); });
       });
     }
 
@@ -1096,13 +860,9 @@
     // ============================================
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
-    let particles = [];
-    let animationId;
+    let particles = [], animationId;
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
@@ -1116,8 +876,7 @@
         this.opacity = Math.random() * 0.5 + 0.1;
       }
       update() {
-        this.x += this.vx;
-        this.y += this.vy;
+        this.x += this.vx; this.y += this.vy;
         if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
         if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
       }
@@ -1154,12 +913,12 @@
       }
     }
 
-    let frameCount = 0;
+    let pFrameCount = 0;
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach(p => { p.update(); p.draw(); });
-      if (frameCount % 2 === 0) drawConnections();
-      frameCount++;
+      if (pFrameCount % 2 === 0) drawConnections();
+      pFrameCount++;
       animationId = requestAnimationFrame(animateParticles);
     }
     if (!prefersReducedMotion) animateParticles();
@@ -1184,11 +943,8 @@
     // ============================================
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add('shadow-lg', 'shadow-black/20');
-      } else {
-        navbar.classList.remove('shadow-lg', 'shadow-black/20');
-      }
+      navbar.classList.toggle('shadow-lg', window.scrollY > 50);
+      navbar.classList.toggle('shadow-black/20', window.scrollY > 50);
     }, { passive: true });
 
     // ============================================
@@ -1204,14 +960,11 @@
         lastFocusedElement = document.activeElement;
         mobileMenu.classList.add('open');
         menuBtn.setAttribute('aria-expanded', 'true');
-        setTimeout(() => {
-          const firstLink = mobileMenu.querySelector('a');
-          if (firstLink) firstLink.focus();
-        }, 300);
+        setTimeout(() => mobileMenu.querySelector('a')?.focus(), 300);
       } else {
         mobileMenu.classList.remove('open');
         menuBtn.setAttribute('aria-expanded', 'false');
-        if (lastFocusedElement) lastFocusedElement.focus();
+        lastFocusedElement?.focus();
       }
     });
 
@@ -1222,20 +975,12 @@
       });
     });
 
-    // Focus trap
     mobileMenu.addEventListener('keydown', (e) => {
       if (e.key === 'Tab' && mobileMenu.classList.contains('open')) {
         const focusable = mobileMenu.querySelectorAll('a[href]');
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
+        const first = focusable[0], last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
       if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
         mobileMenu.classList.remove('open');
@@ -1245,7 +990,7 @@
     });
 
     // ============================================
-    // SMOOTH SCROLL (Custom Lenis-like)
+    // SMOOTH SCROLL (Lenis-like)
     // ============================================
     let currentScroll = 0;
     let targetScroll = 0;
@@ -1254,10 +999,8 @@
     function smoothScrollLoop() {
       targetScroll = window.scrollY;
       currentScroll = lerp(currentScroll, targetScroll, smoothFactor);
-
-      // Parallax updates
       updateParallax();
-
+      updateVelocitySkew();
       requestAnimationFrame(smoothScrollLoop);
     }
 
@@ -1292,10 +1035,32 @@
     window.addEventListener('scroll', updateParallax, { passive: true });
 
     // ============================================
-    // HORIZONTAL SCROLL
+    // VELOCITY SKEW
+    // ============================================
+    let lastScrollY = 0;
+    let scrollVelocity = 0;
+    const velocitySkewElements = document.querySelectorAll('.velocity-skew');
+
+    function updateVelocitySkew() {
+      if (prefersReducedMotion) return;
+      const currentY = window.scrollY;
+      scrollVelocity = lerp(scrollVelocity, currentY - lastScrollY, 0.1);
+      lastScrollY = currentY;
+
+      const skewAmount = Math.max(-2, Math.min(2, scrollVelocity * 0.05));
+      velocitySkewElements.forEach(el => {
+        el.style.transform = `skewY(${skewAmount}deg)`;
+      });
+    }
+
+    // ============================================
+    // HORIZONTAL SCROLL + DRAG
     // ============================================
     const horizontalSection = document.getElementById('horizontal-projects');
     const horizontalTrack = document.getElementById('horizontal-track');
+    let isDragging = false;
+    let startX = 0;
+    let scrollLeft = 0;
 
     function updateHorizontalScroll() {
       if (!horizontalSection || !horizontalTrack) return;
@@ -1311,6 +1076,47 @@
       }
     }
     window.addEventListener('scroll', updateHorizontalScroll, { passive: true });
+
+    // Drag support
+    if (horizontalTrack) {
+      horizontalTrack.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.pageX;
+        horizontalTrack.style.cursor = 'grabbing';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const x = e.pageX;
+        const walk = (x - startX) * 2;
+        window.scrollBy({ top: -walk, behavior: 'auto' });
+        startX = x;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        if (horizontalTrack) horizontalTrack.style.cursor = 'grab';
+      });
+    }
+
+    // ============================================
+    // DOT NAVIGATION
+    // ============================================
+    const dotNavItems = document.querySelectorAll('.dot-nav-item');
+    const sections = document.querySelectorAll('[data-section]');
+
+    function updateDotNav() {
+      const scrollPos = window.scrollY + window.innerHeight / 3;
+      sections.forEach((section, index) => {
+        const top = section.offsetTop;
+        const bottom = top + section.offsetHeight;
+        if (scrollPos >= top && scrollPos < bottom) {
+          dotNavItems.forEach(d => d.classList.remove('active'));
+          if (dotNavItems[index]) dotNavItems[index].classList.add('active');
+        }
+      });
+    }
+    window.addEventListener('scroll', updateDotNav, { passive: true });
 
     // ============================================
     // REVEAL ANIMATIONS
@@ -1330,10 +1136,19 @@
 
       setTimeout(() => {
         revealElements.forEach(el => {
-          const rect = el.getBoundingClientRect();
-          if (rect.top < window.innerHeight) el.classList.add('active');
+          if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('active');
         });
       }, 100);
+    }
+
+    // ============================================
+    // TEXT REVEAL (Hero)
+    // ============================================
+    function initTextReveal() {
+      const textReveals = document.querySelectorAll('.text-reveal');
+      setTimeout(() => {
+        textReveals.forEach(el => el.classList.add('active'));
+      }, 800);
     }
 
     // ============================================
@@ -1354,12 +1169,8 @@
               const progress = Math.min(elapsed / duration, 1);
               const easeOut = 1 - Math.pow(1 - progress, 3);
               counter.textContent = Math.floor(easeOut * target);
-
-              if (progress < 1) {
-                requestAnimationFrame(updateCounter);
-              } else {
-                counter.textContent = target + '+';
-              }
+              if (progress < 1) requestAnimationFrame(updateCounter);
+              else counter.textContent = target + '+';
             }
             requestAnimationFrame(updateCounter);
             counterObserver.unobserve(counter);
@@ -1418,8 +1229,7 @@
 
     function initScramble() {
       document.querySelectorAll('[data-scramble]').forEach(el => {
-        const scrambler = new TextScramble(el);
-        setTimeout(() => scrambler.scramble(), 1500);
+        setTimeout(() => new TextScramble(el).scramble(), 1500);
       });
     }
 
@@ -1486,8 +1296,8 @@
     const projectCards = document.querySelectorAll('.project-card');
 
     document.addEventListener('keydown', (e) => {
-      // Arrow key navigation for projects when in view
       const projectsSection = document.getElementById('projects');
+      if (!projectsSection) return;
       const projectsRect = projectsSection.getBoundingClientRect();
       const isProjectsVisible = projectsRect.top < window.innerHeight && projectsRect.bottom > 0;
 
@@ -1498,19 +1308,11 @@
         projectCards[projectIndex].focus();
       }
 
-      // Escape closes mobile menu
       if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
         mobileMenu.classList.remove('open');
         menuBtn.setAttribute('aria-expanded', 'false');
         menuBtn.focus();
       }
-    });
-
-    // Make project cards focusable
-    projectCards.forEach((card, i) => {
-      card.setAttribute('tabindex', '0');
-      card.setAttribute('role', 'article');
-      card.setAttribute('aria-label', `Project ${i + 1}`);
     });
 
     // ============================================
@@ -1519,14 +1321,11 @@
     function handleSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById('submit-btn');
-      const form = document.getElementById('contact-form');
-
       btn.innerHTML = '<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
       btn.disabled = true;
 
-      // Simulate form submission
       setTimeout(() => {
-        form.classList.add('hidden');
+        document.getElementById('contact-form').classList.add('hidden');
         document.getElementById('success-message').classList.remove('hidden');
         showToast('Message sent successfully!');
       }, 1500);
@@ -1537,6 +1336,7 @@
     // ============================================
     function initAll() {
       initAnimations();
+      initTextReveal();
       initMagneticButtons();
       initTiltCards();
       initSpotlight();
@@ -1545,6 +1345,7 @@
       initScramble();
       smoothScrollLoop();
       updateHorizontalScroll();
+      updateDotNav();
     }
   </script>
 </body>

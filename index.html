@@ -6,112 +6,488 @@
   <title>Asche — Full Stack Developer</title>
   <meta name="description" content="Full-stack developer crafting performant, accessible, and beautiful web applications.">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
           },
           animation: {
             'float': 'float 6s ease-in-out infinite',
             'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'spin-slow': 'spin 12s linear infinite',
+            'marquee': 'marquee 25s linear infinite',
           },
           keyframes: {
             float: {
               '0%, 100%': { transform: 'translateY(0)' },
               '50%': { transform: 'translateY(-20px)' },
+            },
+            marquee: {
+              '0%': { transform: 'translateX(0%)' },
+              '100%': { transform: 'translateX(-50%)' },
             }
           }
         }
       }
     }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
+    :root {
+      --cursor-size: 20px;
+      --cursor-hover-size: 60px;
+      --accent: #34d399;
+      --accent-glow: rgba(52, 211, 153, 0.3);
+    }
+
+    body { 
+      font-family: 'Inter', system-ui, sans-serif; 
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    /* Custom Cursor */
+    .cursor-dot,
+    .cursor-outline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+    }
+    .cursor-outline {
+      width: var(--cursor-size);
+      height: var(--cursor-size);
+      border: 1.5px solid var(--accent);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                  height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.3s,
+                  background 0.3s;
+    }
+    .cursor-outline.hover {
+      width: var(--cursor-hover-size);
+      height: var(--cursor-hover-size);
+      background: rgba(52, 211, 153, 0.08);
+      border-color: rgba(52, 211, 153, 0.5);
+    }
+    .cursor-dot.hover {
+      width: 4px;
+      height: 4px;
+      background: #fff;
+    }
+
+    /* Hide cursor on touch devices */
+    @media (hover: none) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-outline { display: none; }
+    }
+
     .gradient-text {
-      background: linear-gradient(135deg, #34d399 0%, #22d3ee 100%);
+      background: linear-gradient(135deg, #34d399 0%, #22d3ee 50%, #a78bfa 100%);
+      background-size: 200% 200%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      animation: gradient-shift 8s ease infinite;
     }
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
     .glass {
-      background: rgba(10, 10, 10, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(10, 10, 10, 0.6);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
     }
+
     ::selection {
       background: #34d399;
       color: #000;
     }
-    ::-webkit-scrollbar { width: 8px; }
+
+    ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #0a0a0a; }
-    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #444; }
-    
+
+    /* Noise overlay */
+    .noise {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* Reveal animations */
     .reveal {
       opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+      transform: translateY(40px);
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .reveal.active {
       opacity: 1;
       transform: translateY(0);
     }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-left.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-scale.active {
+      opacity: 1;
+      transform: scale(1);
+    }
 
+    /* Stagger children */
+    .stagger-children > *:nth-child(1) { transition-delay: 0ms; }
+    .stagger-children > *:nth-child(2) { transition-delay: 100ms; }
+    .stagger-children > *:nth-child(3) { transition-delay: 200ms; }
+    .stagger-children > *:nth-child(4) { transition-delay: 300ms; }
+    .stagger-children > *:nth-child(5) { transition-delay: 400ms; }
+    .stagger-children > *:nth-child(6) { transition-delay: 500ms; }
+
+    /* Spotlight effect */
+    .spotlight-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .spotlight-card::before {
+      content: '';
+      position: absolute;
+      top: var(--mouse-y, 50%);
+      left: var(--mouse-x, 50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(52, 211, 153, 0.08) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .spotlight-card:hover::before {
+      opacity: 1;
+    }
+
+    /* 3D Tilt */
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+    }
+    .tilt-content {
+      transform: translateZ(30px);
+    }
+
+    /* Magnetic button */
+    .magnetic {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Skill progress bar */
+    .skill-track {
+      background: rgba(255,255,255,0.05);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .skill-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #34d399, #22d3ee);
+      width: 0%;
+      transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .skill-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* Loading screen */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: #0a0a0a;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+    }
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .loader-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      color: #34d399;
+      margin-top: 1.5rem;
+      letter-spacing: 0.1em;
+    }
+    .loader-bar {
+      width: 200px;
+      height: 2px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 2px;
+      margin-top: 1rem;
+      overflow: hidden;
+    }
+    .loader-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #34d399, #22d3ee);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Text scramble */
+    .scramble-text {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Marquee */
+    .marquee-container {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-content {
+      display: inline-flex;
+      animation: marquee 30s linear infinite;
+    }
+
+    /* Glow border on hover */
+    .glow-border {
+      position: relative;
+    }
+    .glow-border::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, transparent, transparent);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .glow-border:hover::after {
+      background: linear-gradient(135deg, #34d399, #22d3ee, #a78bfa);
+      opacity: 1;
+    }
+
+    /* Mobile menu */
     #mobile-menu {
-      transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
       max-height: 0;
       opacity: 0;
       overflow: hidden;
     }
     #mobile-menu.open {
-      max-height: 300px;
+      max-height: 400px;
       opacity: 1;
     }
 
-    html, body {
-      overflow-x: hidden;
-      max-width: 100%;
+    /* Canvas container */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Project card image reveal */
+    .project-img-container {
+      overflow: hidden;
+    }
+    .project-img-container img,
+    .project-img-container .emoji-display {
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .project-card:hover .project-img-container img,
+    .project-card:hover .project-img-container .emoji-display {
+      transform: scale(1.1);
+    }
+
+    /* Terminal typing effect */
+    .terminal-line {
+      border-left: 2px solid #34d399;
+      padding-left: 1rem;
+      margin-left: -1rem;
+    }
+
+    /* Counter animation */
+    .counter {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: orb-float 20s ease-in-out infinite;
+    }
+    @keyframes orb-float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, -30px) scale(1.1); }
+      50% { transform: translate(-20px, 20px) scale(0.9); }
+      75% { transform: translate(20px, 10px) scale(1.05); }
+    }
+
+    /* Status indicator pulse ring */
+    .status-ring {
+      position: relative;
+    }
+    .status-ring::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid #34d399;
+      animation: status-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes status-ping {
+      75%, 100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    /* Link underline animation */
+    .link-underline {
+      position: relative;
+    }
+    .link-underline::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: currentColor;
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .link-underline:hover::after {
+      width: 100%;
+    }
+
+    /* Form input glow */
+    .input-glow:focus {
+      box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1), 0 0 20px rgba(52, 211, 153, 0.05);
+    }
+
+    /* Scroll progress bar */
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #34d399, #22d3ee);
+      z-index: 9999;
+      width: 0%;
+      transition: width 0.1s linear;
     }
   </style>
+<base target="_blank">
 </head>
 <body class="bg-neutral-950 text-white antialiased overflow-x-hidden">
 
+  <!-- Loading Screen -->
+  <div id="loader">
+    <div class="text-4xl font-bold tracking-tighter">Asche<span class="text-emerald-400">.</span></div>
+    <div class="loader-bar">
+      <div class="loader-bar-fill" id="loader-fill"></div>
+    </div>
+    <div class="loader-text" id="loader-text">INITIALIZING...</div>
+  </div>
+
+  <!-- Noise Overlay -->
+  <div class="noise"></div>
+
+  <!-- Scroll Progress -->
+  <div id="scroll-progress"></div>
+
+  <!-- Custom Cursor -->
+  <div class="cursor-dot" id="cursor-dot"></div>
+  <div class="cursor-outline" id="cursor-outline"></div>
+
+  <!-- Particle Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
   <!-- Navigation -->
-  <nav class="fixed top-0 w-full z-50 glass border-b border-white/5 transition-all duration-300" id="navbar">
+  <nav class="fixed top-0 w-full z-50 glass border-b border-white/5 transition-all duration-500" id="navbar">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
-      <a href="#hero" class="text-xl sm:text-2xl font-bold tracking-tighter hover:text-emerald-400 transition-colors duration-300">Asche.</a>
-      
+      <a href="#hero" class="text-xl sm:text-2xl font-bold tracking-tighter hover:text-emerald-400 transition-colors duration-300 magnetic" data-magnetic>ASCH<span class="text-emerald-400">E</span>.</a>
+
       <div class="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-400">
-        <a href="#about" class="hover:text-white transition-colors duration-200 relative group">
-          About
+        <a href="#about" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic>
+          <span class="link-underline">About</span>
           <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
         </a>
-        <a href="#skills" class="hover:text-white transition-colors duration-200 relative group">
-          Skills
+        <a href="#skills" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic>
+          <span class="link-underline">Skills</span>
           <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
         </a>
-        <a href="#projects" class="hover:text-white transition-colors duration-200 relative group">
-          Projects
+        <a href="#projects" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic>
+          <span class="link-underline">Projects</span>
           <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
         </a>
-        <a href="#contact" class="hover:text-white transition-colors duration-200 relative group">
-          Contact
+        <a href="#contact" class="hover:text-white transition-colors duration-200 relative group magnetic" data-magnetic>
+          <span class="link-underline">Contact</span>
           <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full"></span>
         </a>
       </div>
 
-      <button id="menu-btn" class="md:hidden text-white p-2 hover:bg-white/5 rounded-lg transition-colors" aria-label="Toggle menu">
+      <button id="menu-btn" class="md:hidden text-white p-2 hover:bg-white/5 rounded-lg transition-colors magnetic" data-magnetic aria-label="Toggle menu">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       </button>
     </div>
 
-    <!-- Mobile Menu -->
     <div id="mobile-menu" class="md:hidden bg-neutral-900/95 backdrop-blur-xl border-t border-white/5">
       <div class="px-4 sm:px-6 py-4 space-y-1">
         <a href="#about" class="block py-3 text-neutral-400 hover:text-white hover:bg-white/5 rounded-lg px-3 transition-all">About</a>
@@ -124,34 +500,51 @@
 
   <!-- Hero Section -->
   <section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 px-4">
+    <!-- Floating Orbs -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-      <div class="absolute top-1/4 -left-20 sm:left-1/4 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-emerald-500/20 rounded-full blur-[120px] animate-pulse-slow"></div>
-      <div class="absolute bottom-1/4 -right-20 sm:right-1/4 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-purple-500/15 rounded-full blur-[120px] animate-pulse-slow" style="animation-delay: 2s;"></div>
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] sm:w-[600px] sm:h-[600px] bg-cyan-500/10 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 4s;"></div>
+      <div class="orb top-1/4 left-1/4 w-[400px] h-[400px] bg-emerald-500/20" style="animation-delay: 0s;"></div>
+      <div class="orb bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/15" style="animation-delay: -5s;"></div>
+      <div class="orb top-1/2 left-1/2 w-[350px] h-[350px] bg-cyan-500/10" style="animation-delay: -10s;"></div>
     </div>
 
     <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
-      <div class="inline-flex items-center gap-2 mb-4 sm:mb-6 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs sm:text-sm font-medium animate-float">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        Available for work
+      <div class="inline-flex items-center gap-2 mb-4 sm:mb-6 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs sm:text-sm font-medium animate-float">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 status-ring"></span>
+        <span class="scramble-text" data-scramble>Available for work</span>
       </div>
-      
+
       <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 sm:mb-8 leading-[1.1]">
-        Building <span class="gradient-text">digital</span><br>
-        experiences
+        <span id="hero-line1">Building </span><span class="gradient-text" id="hero-line2">digital</span><br>
+        <span id="hero-line3">experiences</span>
       </h1>
-      
-      <p class="text-base sm:text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed px-2">
+
+      <p class="text-base sm:text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed px-2" id="hero-desc">
         Full-stack developer crafting performant, accessible, and beautiful web applications. I turn complex problems into elegant solutions.
       </p>
-      
+
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-        <a href="#projects" class="px-6 sm:px-8 py-3.5 sm:py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25 text-center">
+        <a href="#projects" class="magnetic px-6 sm:px-8 py-3.5 sm:py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25 text-center" data-magnetic>
           View My Work
         </a>
-        <a href="#contact" class="px-6 sm:px-8 py-3.5 sm:py-4 border border-white/20 hover:border-white/40 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:bg-white/5 text-center">
+        <a href="#contact" class="magnetic px-6 sm:px-8 py-3.5 sm:py-4 border border-white/20 hover:border-white/40 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:bg-white/5 text-center" data-magnetic>
           Get In Touch
         </a>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="grid grid-cols-3 gap-4 sm:gap-8 mt-16 sm:mt-24 max-w-lg mx-auto">
+        <div class="text-center">
+          <div class="text-2xl sm:text-3xl font-bold text-white counter" data-target="5">0</div>
+          <div class="text-xs sm:text-sm text-neutral-500 mt-1">Years Exp.</div>
+        </div>
+        <div class="text-center border-x border-white/10">
+          <div class="text-2xl sm:text-3xl font-bold text-white counter" data-target="50">0</div>
+          <div class="text-xs sm:text-sm text-neutral-500 mt-1">Projects</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl sm:text-3xl font-bold text-white counter" data-target="30">0</div>
+          <div class="text-xs sm:text-sm text-neutral-500 mt-1">Clients</div>
+        </div>
       </div>
     </div>
 
@@ -162,55 +555,86 @@
     </div>
   </section>
 
+  <!-- Tech Marquee -->
+  <div class="py-8 border-y border-white/5 overflow-hidden bg-neutral-900/20">
+    <div class="marquee-container">
+      <div class="marquee-content text-neutral-600 text-sm font-mono tracking-widest">
+        <span class="mx-8">REACT</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">NEXT.JS</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">TYPESCRIPT</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">NODE.JS</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">PYTHON</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">POSTGRESQL</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">DOCKER</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">AWS</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">TAILWIND</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">GRAPHQL</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">REACT</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">NEXT.JS</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">TYPESCRIPT</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">NODE.JS</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">PYTHON</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">POSTGRESQL</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">DOCKER</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">AWS</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">TAILWIND</span><span class="text-emerald-500/50">◆</span>
+        <span class="mx-8">GRAPHQL</span><span class="text-emerald-500/50">◆</span>
+      </div>
+    </div>
+  </div>
+
   <!-- About Section -->
-  <section id="about" class="py-20 md:py-32 px-4 sm:px-6">
+  <section id="about" class="py-20 md:py-32 px-4 sm:px-6 relative">
     <div class="max-w-6xl mx-auto">
       <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-        <div class="relative reveal order-2 lg:order-1">
-          <div class="aspect-square rounded-3xl bg-gradient-to-br from-emerald-500/10 via-purple-500/10 to-cyan-500/10 border border-white/5 flex items-center justify-center relative overflow-hidden group">
+        <div class="relative reveal-left order-2 lg:order-1">
+          <div class="aspect-square rounded-3xl bg-gradient-to-br from-emerald-500/10 via-purple-500/10 to-cyan-500/10 border border-white/5 flex items-center justify-center relative overflow-hidden group tilt-card" id="about-card">
             <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="text-[6rem] sm:text-[8rem] md:text-[10rem] lg:text-[12rem] font-bold text-white/[0.03] select-none leading-none">Asche</div>
+            <div class="tilt-content text-[6rem] sm:text-[8rem] md:text-[10rem] lg:text-[12rem] font-bold text-white/[0.03] select-none leading-none">Asche</div>
           </div>
-          <div class="relative sm:absolute sm:-bottom-6 sm:-right-6 md:-bottom-8 md:-right-8 mt-4 sm:mt-0 bg-neutral-900 border border-white/10 rounded-2xl p-4 sm:p-6 shadow-2xl shadow-black/50 inline-block sm:block">
-            <div class="text-3xl sm:text-4xl font-bold text-emerald-400 mb-1">5+</div>
+          <div class="relative sm:absolute sm:-bottom-6 sm:-right-6 md:-bottom-8 md:-right-8 mt-4 sm:mt-0 bg-neutral-900 border border-white/10 rounded-2xl p-4 sm:p-6 shadow-2xl shadow-black/50 inline-block sm:block z-10">
+            <div class="text-3xl sm:text-4xl font-bold text-emerald-400 mb-1 counter" data-target="5">0</div>
             <div class="text-xs sm:text-sm text-neutral-400">Years Experience</div>
           </div>
-          <div class="hidden sm:block absolute -top-4 -left-4 w-16 h-16 md:w-24 md:h-24 border border-emerald-500/20 rounded-2xl"></div>
+          <div class="hidden sm:block absolute -top-4 -left-4 w-16 h-16 md:w-24 md:h-24 border border-emerald-500/20 rounded-2xl animate-spin-slow"></div>
         </div>
 
         <div class="reveal order-1 lg:order-2">
-          <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3">About Me</h2>
-          <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 sm:mb-8 leading-tight">Passionate about creating impactful web experiences</h3>
+          <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3 font-mono">&lt;About /&gt;</h2>
+          <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 sm:mb-8 leading-tight">Passionate about creating <span class="gradient-text">impactful</span> web experiences</h3>
           <p class="text-neutral-400 leading-relaxed mb-4 sm:mb-6 text-base sm:text-lg">
             I'm a developer who loves the intersection of design and engineering. With expertise across the modern web stack, I build products that are fast, accessible, and delightful to use.
           </p>
           <p class="text-neutral-400 leading-relaxed mb-8 sm:mb-10 text-sm sm:text-base">
             When I'm not coding, you'll find me exploring new technologies, contributing to open source, or writing about development best practices.
           </p>
-          
+
+          <!-- Terminal-style info -->
+          <div class="bg-neutral-900/80 border border-white/10 rounded-xl p-4 sm:p-5 font-mono text-xs sm:text-sm mb-8">
+            <div class="terminal-line text-emerald-400 mb-2">$ whoami</div>
+            <div class="text-neutral-300 mb-3">full-stack developer & creative technologist</div>
+            <div class="terminal-line text-emerald-400 mb-2">$ location</div>
+            <div class="text-neutral-300 mb-3">available worldwide / remote-first</div>
+            <div class="terminal-line text-emerald-400 mb-2">$ interests</div>
+            <div class="text-neutral-300">["webgl", "ai/ml", "system design", "ux engineering"]</div>
+          </div>
+
           <!-- Social Links -->
           <div class="flex flex-wrap gap-3">
-            <!-- GitHub -->
-            <a href="https://github.com/leuabe36-sys" target="_blank" rel="noopener" class="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" aria-label="GitHub">
+            <a href="https://github.com/leuabe36-sys" target="_blank" rel="noopener" class="magnetic p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" data-magnetic aria-label="GitHub">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
             </a>
-
-            <!-- TikTok -->
-            <a href="https://tiktok.com/@me665051" target="_blank" rel="noopener" class="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" aria-label="TikTok">
+            <a href="https://tiktok.com/@me665051" target="_blank" rel="noopener" class="magnetic p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" data-magnetic aria-label="TikTok">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
               </svg>
             </a>
-
-            <!-- Telegram -->
-            <a href="tg://resolve?domain=Mrx3036" target="_blank" rel="noopener" class="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" aria-label="Telegram">
+            <a href="tg://resolve?domain=Mrx3036" target="_blank" rel="noopener" class="magnetic p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" data-magnetic aria-label="Telegram">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
               </svg>
             </a>
-
-            <!-- Email -->
-            <a href="mailto:leuabe36@gmail.com" class="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" aria-label="Email">
+            <a href="mailto:leuabe36@gmail.com" class="magnetic p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" data-magnetic aria-label="Email">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
               </svg>
@@ -222,42 +646,66 @@
   </section>
 
   <!-- Skills Section -->
-  <section id="skills" class="py-20 md:py-32 px-4 sm:px-6 bg-neutral-900/30">
+  <section id="skills" class="py-20 md:py-32 px-4 sm:px-6 bg-neutral-900/30 relative">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-12 sm:mb-20 reveal">
-        <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3">Expertise</h2>
-        <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold">Skills & Technologies</h3>
+        <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3 font-mono">&lt;Expertise /&gt;</h2>
+        <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold">Skills & <span class="gradient-text">Technologies</span></h3>
       </div>
-      
-      <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-        <div class="group p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-emerald-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-emerald-500/5 reveal">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-emerald-500/20 transition-colors duration-300">
-            <svg class="w-6 h-6 sm:w-7 sm:h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
-            </svg>
+
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 stagger-children">
+        <div class="group spotlight-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-emerald-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-emerald-500/5 reveal tilt-card">
+          <div class="tilt-content">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-emerald-500/20 transition-colors duration-300">
+              <svg class="w-6 h-6 sm:w-7 sm:h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+              </svg>
+            </div>
+            <h4 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Frontend</h4>
+            <p class="text-neutral-400 leading-relaxed text-sm sm:text-base mb-4">React, Next.js, TypeScript, Tailwind CSS, Framer Motion, Three.js</p>
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs text-neutral-500"><span>React / Next.js</span><span>95%</span></div>
+              <div class="skill-track h-1"><div class="skill-fill" data-width="95"></div></div>
+              <div class="flex justify-between text-xs text-neutral-500 mt-2"><span>TypeScript</span><span>90%</span></div>
+              <div class="skill-track h-1"><div class="skill-fill" data-width="90"></div></div>
+            </div>
           </div>
-          <h4 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Frontend</h4>
-          <p class="text-neutral-400 leading-relaxed text-sm sm:text-base">React, Next.js, TypeScript, Tailwind CSS, Framer Motion, Three.js</p>
         </div>
 
-        <div class="group p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-purple-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/5 reveal">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-purple-500/20 transition-colors duration-300">
-            <svg class="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 01-2 2v4a2 2 0 012 2h14a2 2 0 012-2v-4a2 2 0 01-2-2m-2-4h.01M17 16h.01"/>
-            </svg>
+        <div class="group spotlight-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-purple-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/5 reveal tilt-card">
+          <div class="tilt-content">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-purple-500/20 transition-colors duration-300">
+              <svg class="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 01-2 2v4a2 2 0 012 2h14a2 2 0 012-2v-4a2 2 0 01-2-2m-2-4h.01M17 16h.01"/>
+              </svg>
+            </div>
+            <h4 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Backend</h4>
+            <p class="text-neutral-400 leading-relaxed text-sm sm:text-base mb-4">Node.js, Python, PostgreSQL, Redis, GraphQL, REST APIs, Prisma</p>
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs text-neutral-500"><span>Node.js / Python</span><span>92%</span></div>
+              <div class="skill-track h-1"><div class="skill-fill" data-width="92"></div></div>
+              <div class="flex justify-between text-xs text-neutral-500 mt-2"><span>Databases</span><span>88%</span></div>
+              <div class="skill-track h-1"><div class="skill-fill" data-width="88"></div></div>
+            </div>
           </div>
-          <h4 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Backend</h4>
-          <p class="text-neutral-400 leading-relaxed text-sm sm:text-base">Node.js, Python, PostgreSQL, Redis, GraphQL, REST APIs, Prisma</p>
         </div>
 
-        <div class="group p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-cyan-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-500/5 reveal">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-cyan-500/10 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-cyan-500/20 transition-colors duration-300">
-            <svg class="w-6 h-6 sm:w-7 sm:h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-            </svg>
+        <div class="group spotlight-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-cyan-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-500/5 reveal tilt-card">
+          <div class="tilt-content">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-cyan-500/10 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-cyan-500/20 transition-colors duration-300">
+              <svg class="w-6 h-6 sm:w-7 sm:h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+              </svg>
+            </div>
+            <h4 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">DevOps</h4>
+            <p class="text-neutral-400 leading-relaxed text-sm sm:text-base mb-4">Docker, AWS, Vercel, CI/CD, Linux, Nginx, Terraform</p>
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs text-neutral-500"><span>Cloud / Docker</span><span>85%</span></div>
+              <div class="skill-track h-1"><div class="skill-fill" data-width="85"></div></div>
+              <div class="flex justify-between text-xs text-neutral-500 mt-2"><span>CI/CD</span><span>80%</span></div>
+              <div class="skill-track h-1"><div class="skill-fill" data-width="80"></div></div>
+            </div>
           </div>
-          <h4 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">DevOps</h4>
-          <p class="text-neutral-400 leading-relaxed text-sm sm:text-base">Docker, AWS, Vercel, CI/CD, Linux, Nginx, Terraform</p>
         </div>
       </div>
     </div>
@@ -267,16 +715,16 @@
   <section id="projects" class="py-20 md:py-32 px-4 sm:px-6">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-12 sm:mb-20 reveal">
-        <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3">Portfolio</h2>
-        <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold">Featured Projects</h3>
+        <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3 font-mono">&lt;Portfolio /&gt;</h2>
+        <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold">Featured <span class="gradient-text">Projects</span></h3>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
-        <article class="group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 reveal">
-          <div class="aspect-video bg-gradient-to-br from-emerald-500/10 to-blue-500/10 flex items-center justify-center overflow-hidden">
-            <div class="text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">🚀</div>
+      <div class="grid md:grid-cols-2 gap-6 sm:gap-8 stagger-children">
+        <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 reveal spotlight-card glow-border tilt-card">
+          <div class="project-img-container aspect-video bg-gradient-to-br from-emerald-500/10 to-blue-500/10 flex items-center justify-center overflow-hidden">
+            <div class="emoji-display text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">🚀</div>
           </div>
-          <div class="p-5 sm:p-8">
+          <div class="p-5 sm:p-8 tilt-content">
             <div class="flex flex-wrap gap-2 mb-3 sm:mb-4">
               <span class="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/10">Next.js</span>
               <span class="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-semibold border border-blue-500/10">TypeScript</span>
@@ -285,13 +733,13 @@
             <h4 class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-3 group-hover:text-emerald-400 transition-colors duration-300">SaaS Dashboard</h4>
             <p class="text-neutral-400 leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">A full-featured analytics dashboard with real-time data visualization, team collaboration tools, and role-based access control.</p>
             <div class="flex gap-4 sm:gap-6">
-              <a href="#" class="text-sm font-semibold text-white hover:text-emerald-400 transition-colors duration-200 flex items-center gap-2 group/link">
+              <a href="#" class="magnetic text-sm font-semibold text-white hover:text-emerald-400 transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                 Live Demo 
                 <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                 </svg>
               </a>
-              <a href="#" class="text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link">
+              <a href="#" class="magnetic text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                 GitHub
                 <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -301,11 +749,11 @@
           </div>
         </article>
 
-        <article class="group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 reveal">
-          <div class="aspect-video bg-gradient-to-br from-purple-500/10 to-pink-500/10 flex items-center justify-center overflow-hidden">
-            <div class="text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">🛒</div>
+        <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 reveal spotlight-card glow-border tilt-card">
+          <div class="project-img-container aspect-video bg-gradient-to-br from-purple-500/10 to-pink-500/10 flex items-center justify-center overflow-hidden">
+            <div class="emoji-display text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">🛒</div>
           </div>
-          <div class="p-5 sm:p-8">
+          <div class="p-5 sm:p-8 tilt-content">
             <div class="flex flex-wrap gap-2 mb-3 sm:mb-4">
               <span class="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-semibold border border-purple-500/10">React</span>
               <span class="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-pink-500/10 text-pink-400 text-xs font-semibold border border-pink-500/10">Stripe</span>
@@ -314,13 +762,13 @@
             <h4 class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-3 group-hover:text-purple-400 transition-colors duration-300">E-Commerce Platform</h4>
             <p class="text-neutral-400 leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">Modern shopping experience with cart management, Stripe payments, inventory tracking, and admin analytics panel.</p>
             <div class="flex gap-4 sm:gap-6">
-              <a href="#" class="text-sm font-semibold text-white hover:text-purple-400 transition-colors duration-200 flex items-center gap-2 group/link">
+              <a href="#" class="magnetic text-sm font-semibold text-white hover:text-purple-400 transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                 Live Demo 
                 <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                 </svg>
               </a>
-              <a href="#" class="text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link">
+              <a href="#" class="magnetic text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                 GitHub
                 <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -330,11 +778,11 @@
           </div>
         </article>
 
-        <article class="group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 reveal">
-          <div class="aspect-video bg-gradient-to-br from-orange-500/10 to-red-500/10 flex items-center justify-center overflow-hidden">
-            <div class="text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">📝</div>
+        <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 reveal spotlight-card glow-border tilt-card">
+          <div class="project-img-container aspect-video bg-gradient-to-br from-orange-500/10 to-red-500/10 flex items-center justify-center overflow-hidden">
+            <div class="emoji-display text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">📝</div>
           </div>
-          <div class="p-5 sm:p-8">
+          <div class="p-5 sm:p-8 tilt-content">
             <div class="flex flex-wrap gap-2 mb-3 sm:mb-4">
               <span class="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-orange-500/10 text-orange-400 text-xs font-semibold border border-orange-500/10">Vue</span>
               <span class="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-semibold border border-red-500/10">Firebase</span>
@@ -343,13 +791,13 @@
             <h4 class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-3 group-hover:text-orange-400 transition-colors duration-300">Task Management App</h4>
             <p class="text-neutral-400 leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">Collaborative task manager with real-time updates, drag-and-drop kanban boards, and team workspaces.</p>
             <div class="flex gap-4 sm:gap-6">
-              <a href="#" class="text-sm font-semibold text-white hover:text-orange-400 transition-colors duration-200 flex items-center gap-2 group/link">
+              <a href="#" class="magnetic text-sm font-semibold text-white hover:text-orange-400 transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                 Live Demo 
                 <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                 </svg>
               </a>
-              <a href="#" class="text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link">
+              <a href="#" class="magnetic text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                 GitHub
                 <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -359,11 +807,11 @@
           </div>
         </article>
 
-        <article class="group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 reveal">
-          <div class="aspect-video bg-gradient-to-br from-cyan-500/10 to-teal-500/10 flex items-center justify-center overflow-hidden">
-            <div class="text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">🤖</div>
+        <article class="project-card group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-900 border border-white/5 hover:border-white/10 transition-all duration-500 reveal spotlight-card glow-border tilt-card">
+          <div class="project-img-container aspect-video bg-gradient-to-br from-cyan-500/10 to-teal-500/10 flex items-center justify-center overflow-hidden">
+            <div class="emoji-display text-6xl sm:text-8xl opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700 group-hover:rotate-6">🤖</div>
           </div>
-          <div class="p-5 sm:p-8">
+          <div class="p-5 sm:p-8 tilt-content">
             <div class="flex flex-wrap gap-2 mb-3 sm:mb-4">
               <span class="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-semibold border border-cyan-500/10">Python</span>
               <span class="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-teal-500/10 text-teal-400 text-xs font-semibold border border-teal-500/10">OpenAI</span>
@@ -372,13 +820,13 @@
             <h4 class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-3 group-hover:text-cyan-400 transition-colors duration-300">AI Content Generator</h4>
             <p class="text-neutral-400 leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">AI-powered writing assistant with markdown support, export options, prompt templates, and usage analytics.</p>
             <div class="flex gap-4 sm:gap-6">
-              <a href="#" class="text-sm font-semibold text-white hover:text-cyan-400 transition-colors duration-200 flex items-center gap-2 group/link">
+              <a href="#" class="magnetic text-sm font-semibold text-white hover:text-cyan-400 transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                 Live Demo 
                 <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                 </svg>
               </a>
-              <a href="#" class="text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link">
+              <a href="#" class="magnetic text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group/link" data-magnetic>
                 GitHub
                 <svg class="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -392,34 +840,34 @@
   </section>
 
   <!-- Contact Section -->
-  <section id="contact" class="py-20 md:py-32 px-4 sm:px-6 bg-neutral-900/30">
+  <section id="contact" class="py-20 md:py-32 px-4 sm:px-6 bg-neutral-900/30 relative">
     <div class="max-w-3xl mx-auto">
       <div class="text-center mb-10 sm:mb-16 reveal">
-        <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3">Contact</h2>
-        <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 sm:mb-6">Let's Work Together</h3>
+        <h2 class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-widest mb-3 font-mono">&lt;Contact /&gt;</h2>
+        <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 sm:mb-6">Let's <span class="gradient-text">Work Together</span></h3>
         <p class="text-neutral-400 text-base sm:text-lg px-2">Have a project in mind? I'd love to hear about it. Send me a message and let's create something amazing.</p>
       </div>
 
       <form id="contact-form" class="space-y-4 sm:space-y-6 reveal" onsubmit="handleSubmit(event)">
         <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
           <div class="group">
-            <label class="block text-xs sm:text-sm font-medium text-neutral-400 mb-1.5 sm:mb-2 group-focus-within:text-emerald-400 transition-colors">Name</label>
-            <input type="text" required class="w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-neutral-900 border border-white/10 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 text-white placeholder-neutral-600 transition-all duration-300" placeholder="John Doe">
+            <label class="block text-xs sm:text-sm font-medium text-neutral-400 mb-1.5 sm:mb-2 group-focus-within:text-emerald-400 transition-colors font-mono">Name</label>
+            <input type="text" required class="input-glow w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-neutral-900 border border-white/10 focus:border-emerald-500/50 focus:outline-none text-white placeholder-neutral-600 transition-all duration-300" placeholder="John Doe">
           </div>
           <div class="group">
-            <label class="block text-xs sm:text-sm font-medium text-neutral-400 mb-1.5 sm:mb-2 group-focus-within:text-emerald-400 transition-colors">Email</label>
-            <input type="email" required class="w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-neutral-900 border border-white/10 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 text-white placeholder-neutral-600 transition-all duration-300" placeholder="john@example.com">
+            <label class="block text-xs sm:text-sm font-medium text-neutral-400 mb-1.5 sm:mb-2 group-focus-within:text-emerald-400 transition-colors font-mono">Email</label>
+            <input type="email" required class="input-glow w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-neutral-900 border border-white/10 focus:border-emerald-500/50 focus:outline-none text-white placeholder-neutral-600 transition-all duration-300" placeholder="john@example.com">
           </div>
         </div>
         <div class="group">
-          <label class="block text-xs sm:text-sm font-medium text-neutral-400 mb-1.5 sm:mb-2 group-focus-within:text-emerald-400 transition-colors">Subject</label>
-          <input type="text" required class="w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-neutral-900 border border-white/10 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 text-white placeholder-neutral-600 transition-all duration-300" placeholder="Project inquiry">
+          <label class="block text-xs sm:text-sm font-medium text-neutral-400 mb-1.5 sm:mb-2 group-focus-within:text-emerald-400 transition-colors font-mono">Subject</label>
+          <input type="text" required class="input-glow w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-neutral-900 border border-white/10 focus:border-emerald-500/50 focus:outline-none text-white placeholder-neutral-600 transition-all duration-300" placeholder="Project inquiry">
         </div>
         <div class="group">
-          <label class="block text-xs sm:text-sm font-medium text-neutral-400 mb-1.5 sm:mb-2 group-focus-within:text-emerald-400 transition-colors">Message</label>
-          <textarea rows="4" required class="w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-neutral-900 border border-white/10 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 text-white placeholder-neutral-600 transition-all duration-300 resize-none" placeholder="Tell me about your project..."></textarea>
+          <label class="block text-xs sm:text-sm font-medium text-neutral-400 mb-1.5 sm:mb-2 group-focus-within:text-emerald-400 transition-colors font-mono">Message</label>
+          <textarea rows="4" required class="input-glow w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-neutral-900 border border-white/10 focus:border-emerald-500/50 focus:outline-none text-white placeholder-neutral-600 transition-all duration-300 resize-none" placeholder="Tell me about your project..."></textarea>
         </div>
-        <button type="submit" id="submit-btn" class="w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25 flex items-center justify-center gap-2">
+        <button type="submit" id="submit-btn" class="magnetic w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25 flex items-center justify-center gap-2" data-magnetic>
           <span>Send Message</span>
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
@@ -443,12 +891,12 @@
   <footer class="py-8 sm:py-12 px-4 sm:px-6 border-t border-white/5">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
       <div class="flex items-center gap-2">
-        <span class="text-xl sm:text-2xl font-bold">Asche.</span>
+        <span class="text-xl sm:text-2xl font-bold">Asche<span class="text-emerald-400">.</span></span>
         <span class="text-neutral-600">|</span>
         <span class="text-neutral-500 text-xs sm:text-sm">Full Stack Developer</span>
       </div>
-      <p class="text-neutral-600 text-xs sm:text-sm text-center"> Built with passion and caffeine.</p>
-      <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-2.5 sm:p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" aria-label="Back to top">
+      <p class="text-neutral-600 text-xs sm:text-sm text-center font-mono"> Built with passion and caffeine.</p>
+      <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="magnetic p-2.5 sm:p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1" data-magnetic aria-label="Back to top">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
         </svg>
@@ -457,21 +905,217 @@
   </footer>
 
   <script>
+    // ============================================
+    // LOADING SCREEN
+    // ============================================
+    const loader = document.getElementById('loader');
+    const loaderFill = document.getElementById('loader-fill');
+    const loaderText = document.getElementById('loader-text');
+    const loadingTexts = ['INITIALIZING...', 'LOADING ASSETS...', 'COMPILING...', 'RENDERING...', 'READY'];
+    let loadProgress = 0;
+
+    function simulateLoading() {
+      const interval = setInterval(() => {
+        loadProgress += Math.random() * 15;
+        if (loadProgress >= 100) {
+          loadProgress = 100;
+          clearInterval(interval);
+          loaderFill.style.width = '100%';
+          loaderText.textContent = loadingTexts[4];
+          setTimeout(() => {
+            loader.classList.add('hidden');
+            initAnimations();
+          }, 600);
+        } else {
+          loaderFill.style.width = loadProgress + '%';
+          const textIndex = Math.min(Math.floor(loadProgress / 25), 3);
+          loaderText.textContent = loadingTexts[textIndex];
+        }
+      }, 150);
+    }
+
+    window.addEventListener('load', simulateLoading);
+
+    // ============================================
+    // CUSTOM CURSOR
+    // ============================================
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorOutline = document.getElementById('cursor-outline');
+    let mouseX = 0, mouseY = 0;
+    let outlineX = 0, outlineY = 0;
+
+    const isTouchDevice = window.matchMedia('(hover: none)').matches;
+
+    if (!isTouchDevice) {
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorDot.style.left = mouseX + 'px';
+        cursorDot.style.top = mouseY + 'px';
+      });
+
+      function animateCursor() {
+        outlineX += (mouseX - outlineX) * 0.15;
+        outlineY += (mouseY - outlineY) * 0.15;
+        cursorOutline.style.left = outlineX + 'px';
+        cursorOutline.style.top = outlineY + 'px';
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+
+      // Hover states
+      const hoverElements = document.querySelectorAll('a, button, [data-magnetic]');
+      hoverElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursorOutline.classList.add('hover');
+          cursorDot.classList.add('hover');
+        });
+        el.addEventListener('mouseleave', () => {
+          cursorOutline.classList.remove('hover');
+          cursorDot.classList.remove('hover');
+        });
+      });
+    }
+
+    // ============================================
+    // PARTICLE CANVAS BACKGROUND
+    // ============================================
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let animationId;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.size = Math.random() * 2 + 0.5;
+        this.opacity = Math.random() * 0.5 + 0.1;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(52, 211, 153, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      const count = Math.min(window.innerWidth / 15, 100);
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    }
+    initParticles();
+
+    function drawConnections() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 150) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(52, 211, 153, ${0.1 * (1 - dist / 150)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    let frameCount = 0;
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      // Draw connections every 2nd frame for performance
+      if (frameCount % 2 === 0) {
+        drawConnections();
+      }
+      frameCount++;
+
+      animationId = requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // Pause particles when tab is hidden
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationId);
+      } else {
+        animateParticles();
+      }
+    });
+
+    // ============================================
+    // SCROLL PROGRESS BAR
+    // ============================================
+    const scrollProgress = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // ============================================
+    // NAVBAR SCROLL EFFECT
+    // ============================================
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('shadow-lg', 'shadow-black/20');
+      } else {
+        navbar.classList.remove('shadow-lg', 'shadow-black/20');
+      }
+    });
+
+    // ============================================
+    // MOBILE MENU
+    // ============================================
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-    
+
     menuBtn.addEventListener('click', () => {
       mobileMenu.classList.toggle('open');
-      mobileMenu.classList.toggle('hidden');
     });
 
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.remove('open');
-        mobileMenu.classList.add('hidden');
       });
     });
 
+    // ============================================
+    // SMOOTH SCROLL
+    // ============================================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -484,40 +1128,219 @@
       });
     });
 
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add('shadow-lg', 'shadow-black/20');
-      } else {
-        navbar.classList.remove('shadow-lg', 'shadow-black/20');
+    // ============================================
+    // REVEAL ANIMATIONS (Intersection Observer)
+    // ============================================
+    function initAnimations() {
+      const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-scale');
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      revealElements.forEach(el => revealObserver.observe(el));
+
+      // Trigger initial visible elements
+      setTimeout(() => {
+        revealElements.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight) {
+            el.classList.add('active');
+          }
+        });
+      }, 100);
+    }
+
+    // ============================================
+    // COUNTER ANIMATION
+    // ============================================
+    function animateCounters() {
+      const counters = document.querySelectorAll('.counter');
+      const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const counter = entry.target;
+            const target = parseInt(counter.getAttribute('data-target'));
+            const duration = 2000;
+            const start = performance.now();
+
+            function updateCounter(currentTime) {
+              const elapsed = currentTime - start;
+              const progress = Math.min(elapsed / duration, 1);
+              const easeOut = 1 - Math.pow(1 - progress, 3);
+              counter.textContent = Math.floor(easeOut * target);
+
+              if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+              } else {
+                counter.textContent = target + (target === 5 ? '+' : '+');
+              }
+            }
+
+            requestAnimationFrame(updateCounter);
+            counterObserver.unobserve(counter);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      counters.forEach(c => counterObserver.observe(c));
+    }
+
+    // ============================================
+    // SKILL BAR ANIMATION
+    // ============================================
+    function animateSkillBars() {
+      const skillFills = document.querySelectorAll('.skill-fill');
+      const skillObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const fill = entry.target;
+            const width = fill.getAttribute('data-width');
+            setTimeout(() => {
+              fill.style.width = width + '%';
+            }, 300);
+            skillObserver.unobserve(fill);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      skillFills.forEach(f => skillObserver.observe(f));
+    }
+
+    // ============================================
+    // TEXT SCRAMBLE EFFECT
+    // ============================================
+    class TextScramble {
+      constructor(el) {
+        this.el = el;
+        this.chars = '!<>-_\/[]{}—=+*^?#________';
+        this.originalText = el.textContent;
       }
-    });
 
-    const revealElements = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          revealObserver.unobserve(entry.target);
-        }
+      scramble() {
+        const length = this.originalText.length;
+        let iteration = 0;
+        const interval = setInterval(() => {
+          this.el.textContent = this.originalText
+            .split('')
+            .map((char, index) => {
+              if (index < iteration) return this.originalText[index];
+              if (char === ' ') return ' ';
+              return this.chars[Math.floor(Math.random() * this.chars.length)];
+            })
+            .join('');
+
+          if (iteration >= length) clearInterval(interval);
+          iteration += 1 / 2;
+        }, 30);
+      }
+    }
+
+    function initScramble() {
+      const scrambleElements = document.querySelectorAll('[data-scramble]');
+      scrambleElements.forEach(el => {
+        const scrambler = new TextScramble(el);
+        setTimeout(() => scrambler.scramble(), 1500);
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    }
 
-    revealElements.forEach(el => revealObserver.observe(el));
+    // ============================================
+    // MAGNETIC BUTTONS
+    // ============================================
+    function initMagneticButtons() {
+      if (isTouchDevice) return;
 
+      const magneticElements = document.querySelectorAll('[data-magnetic]');
+      magneticElements.forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+
+        el.addEventListener('mouseleave', () => {
+          el.style.transform = 'translate(0, 0)';
+        });
+      });
+    }
+
+    // ============================================
+    // 3D TILT CARDS
+    // ============================================
+    function initTiltCards() {
+      if (isTouchDevice) return;
+
+      const tiltCards = document.querySelectorAll('.tilt-card');
+      tiltCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = (y - centerY) / 20;
+          const rotateY = (centerX - x) / 20;
+
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+        });
+      });
+    }
+
+    // ============================================
+    // SPOTLIGHT EFFECT
+    // ============================================
+    function initSpotlight() {
+      if (isTouchDevice) return;
+
+      const spotlightCards = document.querySelectorAll('.spotlight-card');
+      spotlightCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          card.style.setProperty('--mouse-x', x + '%');
+          card.style.setProperty('--mouse-y', y + '%');
+        });
+      });
+    }
+
+    // ============================================
+    // CONTACT FORM
+    // ============================================
     function handleSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById('submit-btn');
       const originalContent = btn.innerHTML;
-      
+
       btn.innerHTML = '<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
       btn.disabled = true;
-      
+
       setTimeout(() => {
         document.getElementById('contact-form').classList.add('hidden');
         document.getElementById('success-message').classList.remove('hidden');
       }, 1500);
     }
+
+    // ============================================
+    // INITIALIZE ALL
+    // ============================================
+    document.addEventListener('DOMContentLoaded', () => {
+      initMagneticButtons();
+      initTiltCards();
+      initSpotlight();
+      animateCounters();
+      animateSkillBars();
+      initScramble();
+    });
   </script>
 </body>
 </html>
